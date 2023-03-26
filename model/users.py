@@ -63,6 +63,88 @@ class Post(db.Model):
             "base64": str(file_encode)
         }
 
+# Define the User class to manage actions in the 'users' table
+# -- Object Relational Mapping (ORM) is the key concept of SQLAlchemy
+# -- a.) db.Model is like an inner layer of the onion in ORM
+# -- b.) User represents data we want to store, something that is built on db.Model
+# -- c.) SQLAlchemy ORM is layer on top of SQLAlchemy Core, then SQLAlchemy engine, SQL
+class QuizScores(db.Model):
+    __tablename__ = 'quizScores'  # table name is plural, class name is singular
+
+    # Define the User schema with "vars" from object
+    id = db.Column(db.Integer, primary_key=True)
+    _email = db.Column(db.String(255), unique=True, nullable=False)
+    _quiz1Score = db.Column(db.Integer, unique=False, nullable=False)
+
+    # constructor of a User object, initializes the instance variables within object (self)
+    def __init__(self, email, quiz1Score):
+        self._email = email
+        self._quiz1Score = quiz1Score
+
+    # a getter method, extracts email from object
+    @property
+    def email(self):
+        return self._email
+    
+    # a setter function, allows name to be updated after initial object creation
+    @email.setter
+    def email(self, email):
+        self._email = email
+        
+    # a getter method, extracts email from object
+    @property
+    def quiz1Score(self):
+        return self._quiz1Score
+    
+    # a setter function, allows name to be updated after initial object creation
+    @quiz1Score.setter
+    def quiz1Score(self, quiz1Score):
+        self._quiz1Score = quiz1Score
+        
+    # output content using str(object) in human readable form, uses getter
+    # output content using json dumps, this is ready for API response
+    def __str__(self):
+        return json.dumps(self.read())
+
+    # CRUD create/add a new record to the table
+    # returns self or None on error
+    def create(self):
+        try:
+            # creates a person object from User(db.Model) class, passes initializers
+            db.session.add(self)  # add prepares to persist person object to Users table
+            db.session.commit()  # SqlAlchemy "unit of work pattern" requires a manual commit
+            return self
+        except IntegrityError:
+            db.session.remove()
+            return None
+
+    # CRUD read converts self to dictionary
+    # returns dictionary
+    def read(self):
+        return {
+            "id": self.id,
+            "email": self.email,
+            "quiz1Score": self.quiz1Score,
+        }
+
+    # CRUD update: updates user name, password, phone
+    # returns self
+    def update(self, email="", quiz1Score=""):
+        """only updates values with length"""
+        if len(email) > 0:
+            self.email = email
+        self.quiz1Score = quiz1Score
+        db.session.commit()
+        return self
+
+    # CRUD delete: remove self
+    # None
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+        return None
+
+
 
 # Define the User class to manage actions in the 'users' table
 # -- Object Relational Mapping (ORM) is the key concept of SQLAlchemy

@@ -3,7 +3,7 @@ from flask import Blueprint, request, jsonify
 from flask_restful import Api, Resource # used for REST API building
 from datetime import datetime
 
-from model.users import User
+from model.users import User, QuizScores
 
 user_api = Blueprint('user_api', __name__,
                    url_prefix='/api/users')
@@ -79,11 +79,58 @@ class UserAPI:
             
             ''' authenticated user '''
             return jsonify(user.read())
-
+        
+        
+        
+    class _CreateQuizScore(Resource):
+        def post(self):
+            ''' Read data for json body '''
+            body = request.get_json()
+            
+            ''' Avoid garbage in, error checking '''
+            # validate name
+            email = body.get('email')
+            quiz1Score = body.get('quiz1Score')
+            """
+            if name is None or len(name) < 2:
+                return {'message': f'Name is missing, or is less than 2 characters'}, 400
+            # validate uid
+            uid = body.get('uid')
+            if uid is None or len(uid) < 2:
+                return {'message': f'User ID is missing, or is less than 2 characters'}, 400
+            # look for password and dob
+            password = body.get('password')
+            dob = body.get('dob')
+            """
+            ''' #1: Key code block, setup USER OBJECT '''
+            quizScore = QuizScores(email=email, quiz1Score=quiz1Score)
+            
+            ''' Additional garbage error checking '''
+            """
+            # set password if provided
+            if password is not None:
+                uo.set_password(password)
+            # convert to date type
+            if dob is not None:
+                try:
+                    uo.dob = datetime.strptime(dob, '%Y-%m-%d').date()
+                except:
+                    return {'message': f'Date of birth format error {dob}, must be mm-dd-yyyy'}, 400
+            """ 
+            
+            ''' #2: Key Code block to add user to database '''
+            # create user in database
+            user = quizScore.create()
+            # success returns json of user
+            if user:
+                return jsonify(user.read())
+            # failure returns error
+            #return {'message': f'Processed {name}, either a format error or User ID {uid} is duplicate'}, 400
             
 
     # building RESTapi endpoint
     api.add_resource(_Create, '/create')
     api.add_resource(_Read, '/')
     api.add_resource(_Security, '/authenticate')
+    api.add_resource(_CreateQuizScore, '/createquizscore')
     
