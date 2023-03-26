@@ -75,7 +75,7 @@ class User(db.Model):
     # Define the User schema with "vars" from object
     id = db.Column(db.Integer, primary_key=True)
     _name = db.Column(db.String(255), unique=False, nullable=False)
-    _uid = db.Column(db.String(255), unique=True, nullable=False)
+    _email = db.Column(db.String(255), unique=True, nullable=False)
     _password = db.Column(db.String(255), unique=False, nullable=False)
     _dob = db.Column(db.Date)
 
@@ -83,9 +83,9 @@ class User(db.Model):
     posts = db.relationship("Post", cascade='all, delete', backref='users', lazy=True)
 
     # constructor of a User object, initializes the instance variables within object (self)
-    def __init__(self, name, uid, password="123qwerty", dob=date.today()):
+    def __init__(self, name, email, password="123qwerty", dob=date.today()):
         self._name = name    # variables with self prefix become part of the object, 
-        self._uid = uid
+        self._email = email
         self.set_password(password)
         self._dob = dob
 
@@ -101,17 +101,17 @@ class User(db.Model):
     
     # a getter method, extracts email from object
     @property
-    def uid(self):
-        return self._uid
+    def email(self):
+        return self._email
     
     # a setter function, allows name to be updated after initial object creation
-    @uid.setter
-    def uid(self, uid):
-        self._uid = uid
+    @email.setter
+    def email(self, email):
+        self._email = email
         
     # check if uid parameter matches user id in object, return boolean
-    def is_uid(self, uid):
-        return self._uid == uid
+    def is_email(self, email):
+        return self._email == email
     
     @property
     def password(self):
@@ -167,7 +167,7 @@ class User(db.Model):
         return {
             "id": self.id,
             "name": self.name,
-            "uid": self.uid,
+            "email": self.email,
             "dob": self.dob,
             "age": self.age,
             "posts": [post.read() for post in self.posts]
@@ -175,12 +175,12 @@ class User(db.Model):
 
     # CRUD update: updates user name, password, phone
     # returns self
-    def update(self, name="", uid="", password=""):
+    def update(self, name="", email="", password=""):
         """only updates values with length"""
         if len(name) > 0:
             self.name = name
-        if len(uid) > 0:
-            self.uid = uid
+        if len(email) > 0:
+            self.email = email
         if len(password) > 0:
             self.set_password(password)
         db.session.commit()
@@ -203,13 +203,14 @@ def initUsers():
         """Create database and tables"""
         db.create_all()
         """Tester data for table"""
-        u1 = User(name='Thomas Edison', uid='toby', password='123toby', dob=date(1847, 2, 11))
-        u2 = User(name='Nicholas Tesla', uid='niko', password='123niko')
-        u3 = User(name='Alexander Graham Bell', uid='lex', password='123lex')
-        u4 = User(name='Eli Whitney', uid='whit', password='123whit')
-        u5 = User(name='John Mortensen', uid='jm1021', dob=date(1959, 10, 21))
+        u1 = User(name='Antony Yu', email='antony@gmail.com')
+        u2 = User(name='Colin Weis', email='colin@gmail.com')
+        u3 = User(name='Leonard Wright', email='leonard@gmail.com')
+        u4 = User(name='Lily Wu', email='lily@gmail.com')
+        u5 = User(name='Orlando Carcamo', email='orlando@gmail.com')
+        u6 = User(name='Sachit Prasad', email='sachit@gmail.com')
 
-        users = [u1, u2, u3, u4, u5]
+        users = [u1, u2, u3, u4, u5, u6]
 
         """Builds sample user/note(s) data"""
         for user in users:
@@ -223,5 +224,5 @@ def initUsers():
             except IntegrityError:
                 '''fails with bad or duplicate data'''
                 db.session.remove()
-                print(f"Records exist, duplicate email, or error: {user.uid}")
+                print(f"Records exist, duplicate email, or error: {user.email}")
             
