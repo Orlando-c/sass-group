@@ -151,10 +151,12 @@ class QuizQuestions(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     #column name must match defined variable name
     _quizQuestion = db.Column(db.String(255), unique=True, nullable=False)
+    _quizAnswer = db.Column(db.String(255), unique=True, nullable=False)
 
     # constructor of a User object, initializes the instance variables within object (self)
-    def __init__(self, quizQuestion):
+    def __init__(self, quizQuestion, quizAnswer):
         self._quizQuestion = quizQuestion
+        self._quizAnswer = quizAnswer
 
     # a getter method, extracts email from object
     @property
@@ -165,6 +167,17 @@ class QuizQuestions(db.Model):
     @quizQuestion.setter
     def quizQuestion(self, quizQuestion):
         self._quizQuestion = quizQuestion
+    
+    
+    # a getter method, extracts email from object
+    @property
+    def quizAnswer(self):
+        return self._quizAnswer
+    
+    # a setter function, allows name to be updated after initial object creation
+    @quizQuestion.setter
+    def quizAnswer(self, quizAnswer):
+        self._quizAnswer = quizAnswer
         
         
     # output content using str(object) in human readable form, uses getter
@@ -190,13 +203,15 @@ class QuizQuestions(db.Model):
         return {
             "id": self.id,
             "quizQuestion": self.quizQuestion,
+            "quizAnswer": self.quizAnswer
         }
 
     # CRUD update: updates user name, password, phone
     # returns self
-    def update(self, quizQuestion=""):
+    def update(self, quizQuestion="", quizAnswer=""):
         """only updates values with length"""
         self.quizQuestion = quizQuestion
+        self.quizAnswer = quizAnswer
         db.session.commit()
         return self
 
@@ -370,7 +385,7 @@ def initUsers():
                 print(f"Records exist, duplicate email, or error: {user.email}")
 
         
-        q1 = QuizQuestions(quizQuestion="test")
+        q1 = QuizQuestions(quizQuestion="test", quizAnswer="test2")
 
         questions = [q1]
         
