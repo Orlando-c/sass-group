@@ -3,7 +3,7 @@ from flask import Blueprint, request, jsonify
 from flask_restful import Api, Resource # used for REST API building
 from datetime import datetime
 
-from model.users import User, QuizScores
+from model.users import User, QuizScores, QuizQuestions
 
 user_api = Blueprint('user_api', __name__,
                    url_prefix='/api/users')
@@ -126,6 +126,13 @@ class UserAPI:
                 return jsonify(user.read())
             # failure returns error
             #return {'message': f'Processed {name}, either a format error or User ID {uid} is duplicate'}, 400
+    
+    class _ReadQuizQuestions(Resource):
+        def get(self):
+            questions = QuizQuestions.query.all()    # read/extract all users from database
+            json_ready = [question.read() for question in questions]  # prepare output in json
+            return jsonify(json_ready)  # jsonify creates Flask response object, more specific to APIs than json.dumps
+    
             
 
     # building RESTapi endpoint
@@ -133,4 +140,5 @@ class UserAPI:
     api.add_resource(_Read, '/')
     api.add_resource(_Security, '/authenticate')
     api.add_resource(_CreateQuizScore, '/createquizscore')
+    api.add_resource(_ReadQuizQuestions, '/quizquestions')
     
