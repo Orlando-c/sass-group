@@ -400,7 +400,7 @@ def initUsers():
         
         q1 = QuizQuestions(quizQuestion="What do SASS variables start with?", quizAnswer="$", difficulty="easy")
         #need to remove unique=True from difficulty variable defined in QuizQuestions class, else won't show in table
-        q2 = QuizQuestions(quizQuestion="Are SASS variables imperative or declarative?", quizAnswer="test", difficulty="easy")
+        q2 = QuizQuestions(quizQuestion="Are SASS variables imperative or declarative?", quizAnswer="imperative", difficulty="easy")
         q3 = QuizQuestions(quizQuestion="Which of two variables are treated the same by SASS? || A. $coolVar and $coolvar || B. $coolVar1 and $coolVar || C. $cool_var and $cool-var || D. $cool_var and $coolVar", quizAnswer="C", difficulty="easy")
 
         questions = [q1, q2, q3]
