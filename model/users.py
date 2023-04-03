@@ -152,11 +152,13 @@ class QuizQuestions(db.Model):
     #column name must match defined variable name
     _quizQuestion = db.Column(db.String(255), unique=True, nullable=False)
     _quizAnswer = db.Column(db.String(255), unique=True, nullable=False)
+    _difficulty = db.Column(db.String(255), unique=True, nullable=False)
 
     # constructor of a User object, initializes the instance variables within object (self)
-    def __init__(self, quizQuestion, quizAnswer):
+    def __init__(self, quizQuestion, quizAnswer, difficulty):
         self._quizQuestion = quizQuestion
         self._quizAnswer = quizAnswer
+        self._difficulty = difficulty
 
     # a getter method, extracts email from object
     @property
@@ -175,10 +177,19 @@ class QuizQuestions(db.Model):
         return self._quizAnswer
     
     # a setter function, allows name to be updated after initial object creation
-    @quizQuestion.setter
+    @quizAnswer.setter
     def quizAnswer(self, quizAnswer):
         self._quizAnswer = quizAnswer
-        
+      
+    # a getter method, extracts email from object
+    @property
+    def difficulty(self):
+        return self._difficulty
+    
+    # a setter function, allows name to be updated after initial object creation
+    @difficulty.setter
+    def difficulty(self, difficulty):
+        self._difficulty = difficulty  
         
     # output content using str(object) in human readable form, uses getter
     # output content using json dumps, this is ready for API response
@@ -203,15 +214,17 @@ class QuizQuestions(db.Model):
         return {
             "id": self.id,
             "quizQuestion": self.quizQuestion,
-            "quizAnswer": self.quizAnswer
+            "quizAnswer": self.quizAnswer,
+            "difficulty": self.difficulty
         }
 
     # CRUD update: updates user name, password, phone
     # returns self
-    def update(self, quizQuestion="", quizAnswer=""):
+    def update(self, quizQuestion="", quizAnswer="", difficulty=""):
         """only updates values with length"""
         self.quizQuestion = quizQuestion
         self.quizAnswer = quizAnswer
+        self.difficulty = difficulty
         db.session.commit()
         return self
 
@@ -385,7 +398,7 @@ def initUsers():
                 print(f"Records exist, duplicate email, or error: {user.email}")
 
         
-        q1 = QuizQuestions(quizQuestion="test", quizAnswer="test2")
+        q1 = QuizQuestions(quizQuestion="test", quizAnswer="test2", difficulty="easy")
 
         questions = [q1]
         
