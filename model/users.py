@@ -150,9 +150,9 @@ class QuizQuestions(db.Model):
     # Define the User schema with "vars" from object
     id = db.Column(db.Integer, primary_key=True)
     #column name must match defined variable name
-    _quizQuestion = db.Column(db.String(255), unique=True, nullable=False)
-    _quizAnswer = db.Column(db.String(255), unique=True, nullable=False)
-    _difficulty = db.Column(db.String(255), unique=True, nullable=False)
+    _quizQuestion = db.Column(db.String(), unique=True, nullable=False)
+    _quizAnswer = db.Column(db.String(), nullable=False)
+    _difficulty = db.Column(db.String(), nullable=False)
 
     # constructor of a User object, initializes the instance variables within object (self)
     def __init__(self, quizQuestion, quizAnswer, difficulty):
@@ -398,11 +398,13 @@ def initUsers():
                 print(f"Records exist, duplicate email, or error: {user.email}")
 
         
-        q1 = QuizQuestions(quizQuestion="test", quizAnswer="test2", difficulty="easy")
+        q1 = QuizQuestions(quizQuestion="What do SASS variables start with?", quizAnswer="$", difficulty="easy")
+        #need to remove unique=True from difficulty variable defined in QuizQuestions class, else won't show in table
+        q2 = QuizQuestions(quizQuestion="Are SASS variables imperative or declarative?", quizAnswer="test", difficulty="easy")
+        q3 = QuizQuestions(quizQuestion="Which of two variables are treated the same by SASS? || A. $coolVar and $coolvar || B. $coolVar1 and $coolVar || C. $cool_var and $cool-var || D. $cool_var and $coolVar", quizAnswer="C", difficulty="easy")
 
-        questions = [q1]
+        questions = [q1, q2, q3]
         
-        print(questions[0].quizQuestion)
 
         """Builds sample user/note(s) data"""
         for question in questions:
