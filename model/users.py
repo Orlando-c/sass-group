@@ -380,8 +380,9 @@ def initUsers():
         u4 = User(name='Lily Wu', email='lily@gmail.com')
         u5 = User(name='Orlando Carcamo', email='orlando@gmail.com')
         u6 = User(name='Sachit Prasad', email='sachit@gmail.com')
+        u7 = User(name='Joselyn Anda', email='joselynanda@gmail.com')
 
-        users = [u1, u2, u3, u4, u5, u6]
+        users = [u1, u2, u3, u4, u5, u6, u7]
 
         """Builds sample user/note(s) data"""
         for user in users:
