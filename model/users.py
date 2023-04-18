@@ -399,18 +399,30 @@ def initUsers():
                 print(f"Records exist, duplicate email, or error: {user.email}")
 
         
-        q1 = QuizQuestions(quizQuestion="What do SASS variables start with?", quizAnswer="$", difficulty="easy")
-        #need to remove unique=True from difficulty variable defined in QuizQuestions class, else won't show in table
-        q2 = QuizQuestions(quizQuestion="Are SASS variables imperative or declarative?", quizAnswer="imperative", difficulty="easy")
-        q3 = QuizQuestions(quizQuestion="Which of two variables are treated the same by SASS? || A. $coolVar and $coolvar || B. $coolVar1 and $coolVar || C. $cool_var and $cool-var || D. $cool_var and $coolVar", quizAnswer="C", difficulty="easy")
-        q4 = QuizQuestions(quizQuestion="What is the format of interpolation? || A. #{para} || B. ${para} || C. [para] || D. {para}", quizAnswer="A", difficulty="easy")
-        q5 = QuizQuestions(quizQuestion="True/False: CSS has nesting capabilities", quizAnswer="False", difficulty="easy")
-        q6 = QuizQuestions(quizQuestion="True/False: SASS has nesting capabilities", quizAnswer="True", difficulty="easy")
-        q7 = QuizQuestions(quizQuestion="What are the benefits of interpolation? || A. It is always shorter than its equivalent CSS code || B. It helps reduce redundancy || C. It often starts with #{mixin} || D. It injects strings into values", quizAnswer="B", difficulty="medium")
-        q8 = QuizQuestions(quizQuestion="What type of selector would %niceSelector be? || A. Parent selector || B. Extended selector || C. At root selector || D. Placeholder selector", quizAnswer="D", difficulty="medium")
-
-        questions = [q1, q2, q3, q4, q5, q6, q7, q8]
+ 
+        questions = []
         
+        
+        i = 1
+        myFile = open("quizQuestion.txt", "r")
+        fileLine = myFile.readline()
+        while fileLine:
+            if (i % 3 == 1):
+                q1 = QuizQuestions(quizQuestion="test", quizAnswer="test", difficulty="test")
+                q1.quizQuestion = fileLine
+            if (i % 3 == 2):
+                q1.quizAnswer = fileLine
+            if (i % 3 == 0):
+                q1.difficulty = fileLine
+                questions.append(q1)
+                i = 0
+            fileLine = myFile.readline()
+            i += 1
+            print(i)
+        myFile.close()
+                
+            
+                
 
         """Builds sample user/note(s) data"""
         for question in questions:
