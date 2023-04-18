@@ -4,7 +4,7 @@ services:
                 image: flask_sass
                 build: .
                 ports:
-                        - "8036:8036"
+                        - "8036:8080"
                 volumes:
                         - ./volumes:/volumes
                         - ./instance:/instance
