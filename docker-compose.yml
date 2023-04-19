@@ -1,7 +1,7 @@
 version: '3'
 services:
         web:
-                image: flask_sass
+                image: flask_sass_v1
                 build: .
                 ports:
                         - "8036:8080"
